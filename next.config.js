@@ -6,6 +6,7 @@ const nextConfig = {
   basePath: process.env.NODE_ENV === 'production' ? '/fugui-cat-website' : '',
   assetPrefix: process.env.NODE_ENV === 'production' ? '/fugui-cat-website' : '',
   trailingSlash: true,
+  output: 'export',
   images: {
     unoptimized: true
   }
