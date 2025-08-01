@@ -11,15 +11,7 @@ interface VaccineRecord {
   nextDue: string | null
 }
 
-interface HealthReminder {
-  id: number
-  title: string
-  description: string
-  type: 'warning' | 'info' | 'success'
-  icon: string
-  isActive: boolean
-  priority: 'high' | 'medium' | 'low'
-}
+
 
 export default function VaccineRecord() {
   const [vaccineRecords, setVaccineRecords] = useState<VaccineRecord[]>([
@@ -73,12 +65,7 @@ export default function VaccineRecord() {
     }
   ])
 
-  const [healthReminders, setHealthReminders] = useState<HealthReminder[]>([])
-
   const [showModal, setShowModal] = useState(false)
-  const [showReminderModal, setShowReminderModal] = useState(false)
-  const [showManageModal, setShowManageModal] = useState(false)
-  const [editingReminder, setEditingReminder] = useState<HealthReminder | null>(null)
   const [newRecord, setNewRecord] = useState({
     date: '',
     vaccine: '',
@@ -87,49 +74,13 @@ export default function VaccineRecord() {
     nextDue: ''
   })
 
-  const [newReminder, setNewReminder] = useState({
-    title: '',
-    description: '',
-    type: 'info' as 'warning' | 'info' | 'success',
-    icon: '💡',
-    isActive: true,
-    priority: 'medium' as 'high' | 'medium' | 'low'
-  })
+
 
   // 初始化数据
   useEffect(() => {
     const savedRecords = localStorage.getItem('fugui-vaccine-records')
     if (savedRecords) {
       setVaccineRecords(JSON.parse(savedRecords))
-    }
-
-    const savedReminders = localStorage.getItem('fugui-health-reminders')
-    if (savedReminders) {
-      setHealthReminders(JSON.parse(savedReminders))
-    } else {
-      // 默认健康提醒
-      const defaultReminders: HealthReminder[] = [
-        {
-          id: 1,
-          title: '定期体检提醒',
-          description: '建议每年进行一次全面体检',
-          type: 'info',
-          icon: '💡',
-          isActive: true,
-          priority: 'high'
-        },
-        {
-          id: 2,
-          title: '疫苗待完成提醒',
-          description: '请及时安排接种计划',
-          type: 'warning',
-          icon: '⚠️',
-          isActive: true,
-          priority: 'high'
-        }
-      ]
-      setHealthReminders(defaultReminders)
-      localStorage.setItem('fugui-health-reminders', JSON.stringify(defaultReminders))
     }
   }, [])
 
@@ -139,60 +90,11 @@ export default function VaccineRecord() {
     localStorage.setItem('fugui-vaccine-records', JSON.stringify(newRecords))
   }
 
-  const saveReminders = (newReminders: HealthReminder[]) => {
-    setHealthReminders(newReminders)
-    localStorage.setItem('fugui-health-reminders', JSON.stringify(newReminders))
-  }
-
   const getStatusColor = (status: string) => {
     if (status === 'completed') {
       return 'bg-green-100 text-green-800 border-green-200'
     } else {
       return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-    }
-  }
-
-  const getReminderColor = (type: string) => {
-    switch (type) {
-      case 'warning':
-        return 'bg-yellow-50 border-yellow-200'
-      case 'success':
-        return 'bg-green-50 border-green-200'
-      default:
-        return 'bg-blue-50 border-blue-200'
-    }
-  }
-
-  const getReminderTextColor = (type: string) => {
-    switch (type) {
-      case 'warning':
-        return 'text-yellow-800'
-      case 'success':
-        return 'text-green-800'
-      default:
-        return 'text-blue-800'
-    }
-  }
-
-  const getReminderIconColor = (type: string) => {
-    switch (type) {
-      case 'warning':
-        return 'text-yellow-500'
-      case 'success':
-        return 'text-green-500'
-      default:
-        return 'text-blue-500'
-    }
-  }
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high':
-        return 'bg-red-100 text-red-800'
-      case 'medium':
-        return 'bg-yellow-100 text-yellow-800'
-      default:
-        return 'bg-green-100 text-green-800'
     }
   }
 
@@ -227,96 +129,6 @@ export default function VaccineRecord() {
       const updatedRecords = vaccineRecords.filter(record => record.id !== id)
       saveRecords(updatedRecords)
     }
-  }
-
-  const handleAddReminder = () => {
-    if (!newReminder.title || !newReminder.description) {
-      alert('请填写完整信息')
-      return
-    }
-
-    const reminder: HealthReminder = {
-      id: Date.now(),
-      title: newReminder.title,
-      description: newReminder.description,
-      type: newReminder.type,
-      icon: newReminder.icon,
-      isActive: newReminder.isActive,
-      priority: newReminder.priority
-    }
-
-    saveReminders([...healthReminders, reminder])
-    setNewReminder({
-      title: '',
-      description: '',
-      type: 'info',
-      icon: '💡',
-      isActive: true,
-      priority: 'medium'
-    })
-    setShowReminderModal(false)
-  }
-
-  const handleEditReminder = (reminder: HealthReminder) => {
-    setEditingReminder(reminder)
-    setNewReminder({
-      title: reminder.title,
-      description: reminder.description,
-      type: reminder.type,
-      icon: reminder.icon,
-      isActive: reminder.isActive,
-      priority: reminder.priority
-    })
-    setShowReminderModal(true)
-  }
-
-  const handleUpdateReminder = () => {
-    if (!editingReminder || !newReminder.title || !newReminder.description) {
-      alert('请填写完整信息')
-      return
-    }
-
-    const updatedReminders = healthReminders.map(reminder =>
-      reminder.id === editingReminder.id
-        ? {
-            ...reminder,
-            title: newReminder.title,
-            description: newReminder.description,
-            type: newReminder.type,
-            icon: newReminder.icon,
-            isActive: newReminder.isActive,
-            priority: newReminder.priority
-          }
-        : reminder
-    )
-
-    saveReminders(updatedReminders)
-    setEditingReminder(null)
-    setNewReminder({
-      title: '',
-      description: '',
-      type: 'info',
-      icon: '💡',
-      isActive: true,
-      priority: 'medium'
-    })
-    setShowReminderModal(false)
-  }
-
-  const handleDeleteReminder = (id: number) => {
-    if (confirm('确定要删除这条健康提醒吗？')) {
-      const updatedReminders = healthReminders.filter(reminder => reminder.id !== id)
-      saveReminders(updatedReminders)
-    }
-  }
-
-  const toggleReminderActive = (id: number) => {
-    const updatedReminders = healthReminders.map(reminder =>
-      reminder.id === id
-        ? { ...reminder, isActive: !reminder.isActive }
-        : reminder
-    )
-    saveReminders(updatedReminders)
   }
 
   const completedCount = vaccineRecords.filter(r => r.status === 'completed').length
@@ -428,73 +240,24 @@ export default function VaccineRecord() {
 
           {/* 健康提醒 */}
           <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold text-blue-800">健康提醒</h3>
-              <div className="flex space-x-2">
-                <button
-                  onClick={() => {
-                    setEditingReminder(null)
-                    setNewReminder({
-                      title: '',
-                      description: '',
-                      type: 'info',
-                      icon: '💡',
-                      isActive: true,
-                      priority: 'medium'
-                    })
-                    setShowReminderModal(true)
-                  }}
-                  className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200 text-sm"
-                >
-                  + 添加提醒
-                </button>
-                <button
-                  onClick={() => setShowManageModal(true)}
-                  className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition-colors duration-200 text-sm"
-                >
-                  📋 管理提醒
-                </button>
-              </div>
-            </div>
+            <h3 className="text-xl font-bold text-blue-800 mb-4">健康提醒</h3>
             <div className="space-y-3">
-              {healthReminders.filter(reminder => reminder.isActive).map((reminder) => (
-                <div
-                  key={reminder.id}
-                  className={`flex items-center space-x-3 p-3 rounded-lg ${getReminderColor(reminder.type)}`}
-                >
-                  <span className={`text-2xl ${getReminderIconColor(reminder.type)}`}>{reminder.icon}</span>
+              {scheduledCount > 0 && (
+                <div className="flex items-center space-x-3 p-3 bg-yellow-50 rounded-lg">
+                  <span className="text-yellow-500 text-xl">⚠️</span>
                   <div>
-                    <div className="font-medium text-lg text-gray-800">{reminder.title}</div>
-                    <div className="text-sm text-gray-600">{reminder.description}</div>
-                  </div>
-                  <div className="flex items-center space-x-2 ml-auto">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(reminder.priority)}`}>
-                      {reminder.priority}
-                    </span>
-                    <button
-                      onClick={() => toggleReminderActive(reminder.id)}
-                      className="text-gray-600 hover:text-gray-800 text-sm p-1"
-                      title={reminder.isActive ? '关闭提醒' : '开启提醒'}
-                    >
-                      {reminder.isActive ? '🔕' : '🔔'}
-                    </button>
-                    <button
-                      onClick={() => handleEditReminder(reminder)}
-                      className="text-blue-600 hover:text-blue-800 text-sm p-1"
-                      title="编辑提醒"
-                    >
-                      ✏️
-                    </button>
-                    <button
-                      onClick={() => handleDeleteReminder(reminder.id)}
-                      className="text-red-600 hover:text-red-800 text-sm p-1"
-                      title="删除提醒"
-                    >
-                      🗑️
-                    </button>
+                    <div className="font-medium text-yellow-800">有疫苗待完成</div>
+                    <div className="text-sm text-yellow-600">请及时安排接种计划</div>
                   </div>
                 </div>
-              ))}
+              )}
+              <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg">
+                <span className="text-blue-500 text-xl">💡</span>
+                <div>
+                  <div className="font-medium text-blue-800">定期体检提醒</div>
+                  <div className="text-sm text-blue-600">建议每年进行一次全面体检</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -575,198 +338,6 @@ export default function VaccineRecord() {
                   className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200"
                 >
                   添加
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 管理提醒模态框 */}
-        {showManageModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg p-6 w-full max-w-4xl max-h-[80vh] overflow-y-auto">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-xl font-bold text-blue-800">管理健康提醒</h3>
-                <button
-                  onClick={() => setShowManageModal(false)}
-                  className="text-gray-500 hover:text-gray-700 text-2xl"
-                >
-                  ×
-                </button>
-              </div>
-              
-              <div className="space-y-3">
-                {healthReminders.map((reminder) => (
-                  <div
-                    key={reminder.id}
-                    className={`flex items-center space-x-3 p-3 rounded-lg border ${getReminderColor(reminder.type)} ${!reminder.isActive ? 'opacity-60' : ''}`}
-                  >
-                    <span className={`text-2xl ${getReminderIconColor(reminder.type)}`}>{reminder.icon}</span>
-                    <div className="flex-1">
-                      <div className="font-medium text-lg text-gray-800">{reminder.title}</div>
-                      <div className="text-sm text-gray-600">{reminder.description}</div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(reminder.priority)}`}>
-                        {reminder.priority}
-                      </span>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${reminder.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                        {reminder.isActive ? '启用' : '关闭'}
-                      </span>
-                      <button
-                        onClick={() => toggleReminderActive(reminder.id)}
-                        className="text-gray-600 hover:text-gray-800 text-sm p-1"
-                        title={reminder.isActive ? '关闭提醒' : '开启提醒'}
-                      >
-                        {reminder.isActive ? '🔕' : '🔔'}
-                      </button>
-                      <button
-                        onClick={() => {
-                          setEditingReminder(reminder)
-                          setNewReminder({
-                            title: reminder.title,
-                            description: reminder.description,
-                            type: reminder.type,
-                            icon: reminder.icon,
-                            isActive: reminder.isActive,
-                            priority: reminder.priority
-                          })
-                          setShowManageModal(false)
-                          setShowReminderModal(true)
-                        }}
-                        className="text-blue-600 hover:text-blue-800 text-sm p-1"
-                        title="编辑提醒"
-                      >
-                        ✏️
-                      </button>
-                      <button
-                        onClick={() => handleDeleteReminder(reminder.id)}
-                        className="text-red-600 hover:text-red-800 text-sm p-1"
-                        title="删除提醒"
-                      >
-                        🗑️
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="mt-6 text-center">
-                <button
-                  onClick={() => {
-                    setShowManageModal(false)
-                    setEditingReminder(null)
-                    setNewReminder({
-                      title: '',
-                      description: '',
-                      type: 'info',
-                      icon: '💡',
-                      isActive: true,
-                      priority: 'medium'
-                    })
-                    setShowReminderModal(true)
-                  }}
-                  className="px-6 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-200"
-                >
-                  + 添加新提醒
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 健康提醒模态框 */}
-        {showReminderModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-lg p-6 w-full max-w-md">
-              <h3 className="text-xl font-bold text-blue-800 mb-4">
-                {editingReminder ? '编辑健康提醒' : '添加健康提醒'}
-              </h3>
-              
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">提醒标题</label>
-                  <input
-                    type="text"
-                    value={newReminder.title}
-                    onChange={(e) => setNewReminder({...newReminder, title: e.target.value})}
-                    placeholder="例如：定期体检提醒"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">提醒描述</label>
-                  <textarea
-                    value={newReminder.description}
-                    onChange={(e) => setNewReminder({...newReminder, description: e.target.value})}
-                    placeholder="详细描述..."
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">提醒类型</label>
-                  <select
-                    value={newReminder.type}
-                    onChange={(e) => setNewReminder({...newReminder, type: e.target.value as 'warning' | 'info' | 'success'})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="info">信息提醒</option>
-                    <option value="warning">警告提醒</option>
-                    <option value="success">成功提醒</option>
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">图标</label>
-                  <input
-                    type="text"
-                    value={newReminder.icon}
-                    onChange={(e) => setNewReminder({...newReminder, icon: e.target.value})}
-                    placeholder="💡"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">优先级</label>
-                  <select
-                    value={newReminder.priority}
-                    onChange={(e) => setNewReminder({...newReminder, priority: e.target.value as 'high' | 'medium' | 'low'})}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="high">高</option>
-                    <option value="medium">中</option>
-                    <option value="low">低</option>
-                  </select>
-                </div>
-                
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="isActive"
-                    checked={newReminder.isActive}
-                    onChange={(e) => setNewReminder({...newReminder, isActive: e.target.checked})}
-                    className="mr-2"
-                  />
-                  <label htmlFor="isActive" className="text-sm text-gray-700">启用提醒</label>
-                </div>
-              </div>
-              
-              <div className="flex space-x-3 mt-6">
-                <button
-                  onClick={() => setShowReminderModal(false)}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors duration-200"
-                >
-                  取消
-                </button>
-                <button
-                  onClick={editingReminder ? handleUpdateReminder : handleAddReminder}
-                  className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200"
-                >
-                  {editingReminder ? '更新' : '添加'}
                 </button>
               </div>
             </div>
