@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 interface VaccineRecord {
   id: number
@@ -72,6 +72,20 @@ export default function VaccineRecord() {
     nextDue: ''
   })
 
+  // 初始化数据
+  useEffect(() => {
+    const savedRecords = localStorage.getItem('fugui-vaccine-records')
+    if (savedRecords) {
+      setVaccineRecords(JSON.parse(savedRecords))
+    }
+  }, [])
+
+  // 保存数据到localStorage
+  const saveRecords = (newRecords: VaccineRecord[]) => {
+    setVaccineRecords(newRecords)
+    localStorage.setItem('fugui-vaccine-records', JSON.stringify(newRecords))
+  }
+
   const getStatusColor = (status: string) => {
     if (status === 'completed') {
       return 'bg-green-100 text-green-800 border-green-200'
@@ -95,7 +109,7 @@ export default function VaccineRecord() {
       nextDue: newRecord.status === 'scheduled' ? newRecord.nextDue : null
     }
 
-    setVaccineRecords([...vaccineRecords, record])
+    saveRecords([...vaccineRecords, record])
     setNewRecord({
       date: '',
       vaccine: '',
