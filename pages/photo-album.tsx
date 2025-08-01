@@ -146,16 +146,17 @@ export default function PhotoAlbum() {
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {photos.map((photo) => (
                 <div key={photo.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border">
-                  <div className="aspect-w-3 aspect-h-2 bg-pink-100 relative">
+                  <div className="relative aspect-square sm:aspect-w-3 sm:aspect-h-2 bg-pink-100">
                     <Image 
                       src={photo.image}
                       alt={photo.title}
                       width={300}
                       height={200}
-                      className="w-full h-48 object-cover"
+                      className="w-full h-full object-cover"
+                      priority
                     />
                   </div>
                   <div className="p-4">

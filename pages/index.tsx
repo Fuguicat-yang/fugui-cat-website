@@ -63,8 +63,8 @@ export default function Home() {
           {/* 主要内容 */}
           <div className="relative z-10 text-center max-w-6xl mx-auto">
             {/* 标题 */}
-            <div className="mb-8">
-              <h1 className="text-5xl font-bold text-orange-800 mb-4">在爱中长大的富贵</h1>
+            <div className="mb-6 sm:mb-8">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-orange-800 mb-4">在爱中长大的富贵</h1>
             </div>
             
             {/* 富贵信息 */}
@@ -77,30 +77,32 @@ export default function Home() {
             <div className="mb-12">
               <div className="relative w-full max-w-4xl mx-auto">
                 {/* 照片网格容器 */}
-                <div className="grid grid-cols-2 gap-4 md:gap-6 lg:gap-8">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
                   {/* 第一张照片 - 左上 */}
-                  <div className="group relative transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                    <div className="relative w-full h-64 md:h-80 overflow-hidden rounded-2xl shadow-2xl">
+                  <div className="group relative transform rotate-1 sm:rotate-3 hover:rotate-0 transition-transform duration-500">
+                    <div className="relative w-full aspect-square sm:h-64 md:h-80 overflow-hidden rounded-xl sm:rounded-2xl shadow-lg sm:shadow-2xl">
                       <Image 
                         src="fugui-photo-1.jpg" 
                         alt="富贵照片1"
                         width={300}
                         height={320}
                         className="object-cover w-full h-full"
+                        priority
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     </div>
                   </div>
                   
                   {/* 第二张照片 - 右上 */}
-                  <div className="group relative transform -rotate-2 hover:rotate-0 transition-transform duration-500">
-                    <div className="relative w-full h-64 md:h-80 overflow-hidden rounded-2xl shadow-2xl">
+                  <div className="group relative transform -rotate-1 sm:-rotate-2 hover:rotate-0 transition-transform duration-500">
+                    <div className="relative w-full aspect-square sm:h-64 md:h-80 overflow-hidden rounded-xl sm:rounded-2xl shadow-lg sm:shadow-2xl">
                       <Image 
                         src="fugui-photo-2.jpeg" 
                         alt="富贵照片2"
                         width={300}
                         height={320}
                         className="object-cover w-full h-full"
+                        priority
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     </div>
@@ -108,38 +110,40 @@ export default function Home() {
                   
                   {/* 第三张照片 - 左下 */}
                   <div className="group relative transform -rotate-1 hover:rotate-0 transition-transform duration-500">
-                    <div className="relative w-full h-64 md:h-80 overflow-hidden rounded-2xl shadow-2xl">
+                    <div className="relative w-full aspect-square sm:h-64 md:h-80 overflow-hidden rounded-xl sm:rounded-2xl shadow-lg sm:shadow-2xl">
                       <Image 
                         src="fugui-photo-3.jpeg" 
                         alt="富贵照片3"
                         width={300}
                         height={320}
                         className="object-cover w-full h-full"
+                        priority
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     </div>
                   </div>
                   
                   {/* 第四张照片 - 右下 */}
-                  <div className="group relative transform rotate-2 hover:rotate-0 transition-transform duration-500">
-                    <div className="relative w-full h-64 md:h-80 overflow-hidden rounded-2xl shadow-2xl">
+                  <div className="group relative transform rotate-1 sm:rotate-2 hover:rotate-0 transition-transform duration-500">
+                    <div className="relative w-full aspect-square sm:h-64 md:h-80 overflow-hidden rounded-xl sm:rounded-2xl shadow-lg sm:shadow-2xl">
                       <Image 
                         src="fugui-photo-4.jpeg" 
                         alt="富贵照片4"
                         width={300}
                         height={320}
                         className="object-cover w-full h-full"
+                        priority
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                     </div>
                   </div>
                 </div>
                 
-                {/* 装饰性元素 */}
-                <div className="absolute -top-4 -left-4 w-8 h-8 bg-orange-400 rounded-full opacity-60"></div>
-                <div className="absolute -bottom-4 -right-4 w-6 h-6 bg-orange-300 rounded-full opacity-60"></div>
-                <div className="absolute top-1/2 -right-8 w-4 h-4 bg-orange-200 rounded-full opacity-60"></div>
-                <div className="absolute top-1/2 -left-8 w-3 h-3 bg-orange-100 rounded-full opacity-60"></div>
+                {/* 装饰性元素 - 在移动端隐藏 */}
+                <div className="hidden sm:block absolute -top-4 -left-4 w-8 h-8 bg-orange-400 rounded-full opacity-60"></div>
+                <div className="hidden sm:block absolute -bottom-4 -right-4 w-6 h-6 bg-orange-300 rounded-full opacity-60"></div>
+                <div className="hidden sm:block absolute top-1/2 -right-8 w-4 h-4 bg-orange-200 rounded-full opacity-60"></div>
+                <div className="hidden sm:block absolute top-1/2 -left-8 w-3 h-3 bg-orange-100 rounded-full opacity-60"></div>
               </div>
             </div>
           </div>
