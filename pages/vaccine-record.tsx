@@ -1,8 +1,18 @@
 import Head from 'next/head'
 import Link from 'next/link'
+import { useState } from 'react'
+
+interface VaccineRecord {
+  id: number
+  date: string
+  vaccine: string
+  description: string
+  status: 'completed' | 'scheduled'
+  nextDue: string | null
+}
 
 export default function VaccineRecord() {
-  const vaccineRecords = [
+  const [vaccineRecords, setVaccineRecords] = useState<VaccineRecord[]>([
     {
       id: 1,
       date: '2022-01-15',
@@ -51,7 +61,16 @@ export default function VaccineRecord() {
       status: 'scheduled',
       nextDue: '2025-03-15'
     }
-  ]
+  ])
+
+  const [showModal, setShowModal] = useState(false)
+  const [newRecord, setNewRecord] = useState({
+    date: '',
+    vaccine: '',
+    description: '',
+    status: 'completed' as 'completed' | 'scheduled',
+    nextDue: ''
+  })
 
   const getStatusColor = (status: string) => {
     if (status === 'completed') {
@@ -60,6 +79,35 @@ export default function VaccineRecord() {
       return 'bg-yellow-100 text-yellow-800 border-yellow-200'
     }
   }
+
+  const handleAddRecord = () => {
+    if (!newRecord.date || !newRecord.vaccine || !newRecord.description) {
+      alert('请填写完整信息')
+      return
+    }
+
+    const record: VaccineRecord = {
+      id: Date.now(),
+      date: newRecord.date,
+      vaccine: newRecord.vaccine,
+      description: newRecord.description,
+      status: newRecord.status,
+      nextDue: newRecord.status === 'scheduled' ? newRecord.nextDue : null
+    }
+
+    setVaccineRecords([...vaccineRecords, record])
+    setNewRecord({
+      date: '',
+      vaccine: '',
+      description: '',
+      status: 'completed',
+      nextDue: ''
+    })
+    setShowModal(false)
+  }
+
+  const completedCount = vaccineRecords.filter(r => r.status === 'completed').length
+  const scheduledCount = vaccineRecords.filter(r => r.status === 'scheduled').length
 
   return (
     <>
@@ -95,11 +143,11 @@ export default function VaccineRecord() {
           {/* 统计信息 */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-white rounded-lg p-6 text-center shadow-lg">
-              <div className="text-3xl font-bold text-green-500">5</div>
+              <div className="text-3xl font-bold text-green-500">{completedCount}</div>
               <div className="text-gray-700">已完成</div>
             </div>
             <div className="bg-white rounded-lg p-6 text-center shadow-lg">
-              <div className="text-3xl font-bold text-yellow-500">1</div>
+              <div className="text-3xl font-bold text-yellow-500">{scheduledCount}</div>
               <div className="text-gray-700">待完成</div>
             </div>
             <div className="bg-white rounded-lg p-6 text-center shadow-lg">
@@ -114,7 +162,16 @@ export default function VaccineRecord() {
 
           {/* 疫苗记录列表 */}
           <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-blue-800 mb-6">详细记录</h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-blue-800">详细记录</h2>
+              <button 
+                onClick={() => setShowModal(true)}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors duration-200 flex items-center space-x-2"
+              >
+                <span>➕</span>
+                <span>添加记录</span>
+              </button>
+            </div>
             <div className="space-y-4">
               {vaccineRecords.map((record) => (
                 <div key={record.id} className="border rounded-lg p-4 hover:shadow-md transition-shadow duration-200">
@@ -153,13 +210,15 @@ export default function VaccineRecord() {
           <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
             <h3 className="text-xl font-bold text-blue-800 mb-4">健康提醒</h3>
             <div className="space-y-3">
-              <div className="flex items-center space-x-3 p-3 bg-yellow-50 rounded-lg">
-                <span className="text-yellow-500 text-xl">⚠️</span>
-                <div>
-                  <div className="font-medium text-yellow-800">年度疫苗即将到期</div>
-                  <div className="text-sm text-yellow-600">建议在2025年3月15日前接种</div>
+              {scheduledCount > 0 && (
+                <div className="flex items-center space-x-3 p-3 bg-yellow-50 rounded-lg">
+                  <span className="text-yellow-500 text-xl">⚠️</span>
+                  <div>
+                    <div className="font-medium text-yellow-800">有疫苗待完成</div>
+                    <div className="text-sm text-yellow-600">请及时安排接种计划</div>
+                  </div>
                 </div>
-              </div>
+              )}
               <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg">
                 <span className="text-blue-500 text-xl">💡</span>
                 <div>
@@ -170,6 +229,88 @@ export default function VaccineRecord() {
             </div>
           </div>
         </div>
+
+        {/* 添加记录模态框 */}
+        {showModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg p-6 w-full max-w-md">
+              <h3 className="text-xl font-bold text-blue-800 mb-4">添加疫苗记录</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">接种日期</label>
+                  <input
+                    type="date"
+                    value={newRecord.date}
+                    onChange={(e) => setNewRecord({...newRecord, date: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">疫苗名称</label>
+                  <input
+                    type="text"
+                    value={newRecord.vaccine}
+                    onChange={(e) => setNewRecord({...newRecord, vaccine: e.target.value})}
+                    placeholder="例如：三联疫苗"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">描述</label>
+                  <textarea
+                    value={newRecord.description}
+                    onChange={(e) => setNewRecord({...newRecord, description: e.target.value})}
+                    placeholder="记录接种情况..."
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">状态</label>
+                  <select
+                    value={newRecord.status}
+                    onChange={(e) => setNewRecord({...newRecord, status: e.target.value as 'completed' | 'scheduled'})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="completed">已完成</option>
+                    <option value="scheduled">待完成</option>
+                  </select>
+                </div>
+                
+                {newRecord.status === 'scheduled' && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">下次到期日期</label>
+                    <input
+                      type="date"
+                      value={newRecord.nextDue}
+                      onChange={(e) => setNewRecord({...newRecord, nextDue: e.target.value})}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex space-x-3 mt-6">
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                >
+                  取消
+                </button>
+                <button
+                  onClick={handleAddRecord}
+                  className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200"
+                >
+                  添加
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   )
