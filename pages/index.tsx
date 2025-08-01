@@ -82,7 +82,7 @@ export default function Home() {
                   <div className="group relative transform rotate-3 hover:rotate-0 transition-transform duration-500">
                     <div className="relative w-full h-64 md:h-80 overflow-hidden rounded-2xl shadow-2xl">
                       <Image 
-                        src="/fugui-photo-1.jpg" 
+                        src="fugui-photo-1.jpg" 
                         alt="富贵照片1"
                         width={300}
                         height={320}
@@ -96,7 +96,7 @@ export default function Home() {
                   <div className="group relative transform -rotate-2 hover:rotate-0 transition-transform duration-500">
                     <div className="relative w-full h-64 md:h-80 overflow-hidden rounded-2xl shadow-2xl">
                       <Image 
-                        src="/fugui-photo-2.jpeg" 
+                        src="fugui-photo-2.jpeg" 
                         alt="富贵照片2"
                         width={300}
                         height={320}
@@ -110,7 +110,7 @@ export default function Home() {
                   <div className="group relative transform -rotate-1 hover:rotate-0 transition-transform duration-500">
                     <div className="relative w-full h-64 md:h-80 overflow-hidden rounded-2xl shadow-2xl">
                       <Image 
-                        src="/fugui-photo-3.jpeg" 
+                        src="fugui-photo-3.jpeg" 
                         alt="富贵照片3"
                         width={300}
                         height={320}
@@ -124,7 +124,7 @@ export default function Home() {
                   <div className="group relative transform rotate-2 hover:rotate-0 transition-transform duration-500">
                     <div className="relative w-full h-64 md:h-80 overflow-hidden rounded-2xl shadow-2xl">
                       <Image 
-                        src="/fugui-photo-4.jpeg" 
+                        src="fugui-photo-4.jpeg" 
                         alt="富贵照片4"
                         width={300}
                         height={320}

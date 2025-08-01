@@ -40,7 +40,7 @@ export default function PhotoAlbum() {
       date: '2021-11-01',
       description: '刚出生的小富贵，还很小很小',
       likes: 15,
-      image: '/fugui-photo.jpg'
+      image: 'fugui-photo-1.jpg'
     },
     {
       id: 2,
@@ -48,7 +48,7 @@ export default function PhotoAlbum() {
       date: '2021-12-01',
       description: '好奇地打量着这个世界',
       likes: 23,
-      image: '/fugui-photo.jpg'
+      image: 'fugui-photo-2.jpeg'
     },
     {
       id: 3,
@@ -56,7 +56,7 @@ export default function PhotoAlbum() {
       date: '2022-03-15',
       description: '在窗台上享受阳光',
       likes: 31,
-      image: '/fugui-photo.jpg'
+      image: 'fugui-photo-3.jpeg'
     },
     {
       id: 4,
@@ -64,7 +64,7 @@ export default function PhotoAlbum() {
       date: '2022-05-01',
       description: '已经长成了一只漂亮的小猫咪',
       likes: 28,
-      image: '/fugui-photo.jpg'
+      image: 'fugui-photo-4.jpeg'
     },
     {
       id: 5,
@@ -72,7 +72,7 @@ export default function PhotoAlbum() {
       date: '2022-11-01',
       description: '成年猫咪了，但依然可爱',
       likes: 42,
-      image: '/fugui-photo.jpg'
+      image: 'fugui-photo-1.jpg'
     },
     {
       id: 6,
@@ -80,7 +80,7 @@ export default function PhotoAlbum() {
       date: '2024-12-01',
       description: '在沙发上休息的富贵',
       likes: 19,
-      image: '/fugui-photo.jpg'
+      image: 'fugui-photo-2.jpeg'
     }
   ]
 
