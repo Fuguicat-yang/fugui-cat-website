@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Image from 'next/image'
 import Link from 'next/link'
+import QQImage from '../components/QQImage'
 
 export default function Home() {
   // 计算富贵的年龄
@@ -56,6 +57,7 @@ export default function Home() {
               <Link href="/food-record">
                 <button className="px-5 py-2 rounded-full bg-green-500 hover:bg-green-600 text-white font-semibold shadow transition-colors duration-200">换粮记录本</button>
               </Link>
+
             </div>
         </nav>
         {/* 主要内容区域 */}
@@ -147,6 +149,56 @@ export default function Home() {
                 <div className="hidden sm:block absolute -bottom-4 -right-4 w-6 h-6 bg-orange-300 rounded-full opacity-60"></div>
                 <div className="hidden sm:block absolute top-1/2 -right-8 w-4 h-4 bg-orange-200 rounded-full opacity-60"></div>
                 <div className="hidden sm:block absolute top-1/2 -left-8 w-3 h-3 bg-orange-100 rounded-full opacity-60"></div>
+              </div>
+            </div>
+
+            {/* QQ空间图片测试区域 */}
+            <div className="mt-12 bg-white/80 backdrop-blur rounded-lg p-6 shadow-lg">
+              <h2 className="text-2xl font-bold text-blue-800 mb-4">QQ空间图片测试</h2>
+              <p className="text-gray-600 mb-4">测试QQ空间图片是否能正常显示</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* 测试图片1 */}
+                <div className="text-center">
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">测试图片1</h3>
+                  <div className="w-full h-48 bg-gray-100 rounded-lg overflow-hidden">
+                    <QQImage 
+                      src="https://example.com/test-image-1.jpg"
+                      alt="测试图片1"
+                      width={300}
+                      height={200}
+                      className="w-full h-full"
+                    />
+                  </div>
+                  <p className="text-sm text-gray-500 mt-2">请替换为你的QQ空间图片链接</p>
+                </div>
+
+                {/* 测试图片2 */}
+                <div className="text-center">
+                  <h3 className="text-lg font-semibold text-gray-700 mb-2">测试图片2</h3>
+                  <div className="w-full h-48 bg-gray-100 rounded-lg overflow-hidden">
+                    <QQImage 
+                      src="https://example.com/test-image-2.jpg"
+                      alt="测试图片2"
+                      width={300}
+                      height={200}
+                      className="w-full h-full"
+                    />
+                  </div>
+                  <p className="text-sm text-gray-500 mt-2">请替换为你的QQ空间图片链接</p>
+                </div>
+              </div>
+
+              <div className="mt-4 text-center">
+                <p className="text-sm text-gray-600 mb-2">
+                  使用方法：将QQ空间图片链接替换到上面的src属性中
+                </p>
+                <div className="bg-gray-100 p-3 rounded text-sm text-left">
+                  <p className="font-medium mb-1">示例：</p>
+                  <code className="text-blue-600">
+                    src="https://user.qzone.qq.com/你的QQ号/photo/图片ID"
+                  </code>
+                </div>
               </div>
             </div>
           </div>

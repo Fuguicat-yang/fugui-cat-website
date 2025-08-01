@@ -66,6 +66,7 @@ export default function VaccineRecord() {
   ])
 
   const [showModal, setShowModal] = useState(false)
+  const [editingRecord, setEditingRecord] = useState<VaccineRecord | null>(null)
   const [newRecord, setNewRecord] = useState({
     date: '',
     vaccine: '',
@@ -129,6 +130,49 @@ export default function VaccineRecord() {
       const updatedRecords = vaccineRecords.filter(record => record.id !== id)
       saveRecords(updatedRecords)
     }
+  }
+
+  const handleEditRecord = (record: VaccineRecord) => {
+    setEditingRecord(record)
+    setNewRecord({
+      date: record.date,
+      vaccine: record.vaccine,
+      description: record.description,
+      status: record.status,
+      nextDue: record.nextDue || ''
+    })
+    setShowModal(true)
+  }
+
+  const handleUpdateRecord = () => {
+    if (!editingRecord || !newRecord.date || !newRecord.vaccine || !newRecord.description) {
+      alert('请填写完整信息')
+      return
+    }
+
+    const updatedRecords = vaccineRecords.map(record =>
+      record.id === editingRecord.id
+        ? {
+            ...record,
+            date: newRecord.date,
+            vaccine: newRecord.vaccine,
+            description: newRecord.description,
+            status: newRecord.status,
+            nextDue: newRecord.status === 'scheduled' ? newRecord.nextDue : null
+          }
+        : record
+    )
+
+    saveRecords(updatedRecords)
+    setEditingRecord(null)
+    setNewRecord({
+      date: '',
+      vaccine: '',
+      description: '',
+      status: 'completed',
+      nextDue: ''
+    })
+    setShowModal(false)
   }
 
   const completedCount = vaccineRecords.filter(r => r.status === 'completed').length
@@ -225,6 +269,13 @@ export default function VaccineRecord() {
                         <span className="text-yellow-500 text-2xl">⏳</span>
                       )}
                       <button
+                        onClick={() => handleEditRecord(record)}
+                        className="text-blue-600 hover:text-blue-800 text-sm p-1"
+                        title="编辑记录"
+                      >
+                        ✏️
+                      </button>
+                      <button
                         onClick={() => handleDeleteRecord(record.id)}
                         className="text-red-600 hover:text-red-800 text-sm p-1"
                         title="删除记录"
@@ -238,9 +289,9 @@ export default function VaccineRecord() {
             </div>
           </div>
 
-          {/* 健康提醒 */}
+          {/* 体检待办 */}
           <div className="mt-8 bg-white rounded-lg shadow-lg p-6">
-            <h3 className="text-xl font-bold text-blue-800 mb-4">健康提醒</h3>
+            <h3 className="text-xl font-bold text-blue-800 mb-4">体检待办</h3>
             <div className="space-y-3">
               {scheduledCount > 0 && (
                 <div className="flex items-center space-x-3 p-3 bg-yellow-50 rounded-lg">
@@ -252,9 +303,9 @@ export default function VaccineRecord() {
                 </div>
               )}
               <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg">
-                <span className="text-blue-500 text-xl">💡</span>
+                <span className="text-blue-500 text-xl">🏥</span>
                 <div>
-                  <div className="font-medium text-blue-800">定期体检提醒</div>
+                  <div className="font-medium text-blue-800">年度体检待办</div>
                   <div className="text-sm text-blue-600">建议每年进行一次全面体检</div>
                 </div>
               </div>
@@ -262,11 +313,13 @@ export default function VaccineRecord() {
           </div>
         </div>
 
-        {/* 添加记录模态框 */}
+        {/* 添加/编辑记录模态框 */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg p-6 w-full max-w-md">
-              <h3 className="text-xl font-bold text-blue-800 mb-4">添加疫苗记录</h3>
+              <h3 className="text-xl font-bold text-blue-800 mb-4">
+                {editingRecord ? '编辑疫苗记录' : '添加疫苗记录'}
+              </h3>
               
               <div className="space-y-4">
                 <div>
@@ -328,16 +381,26 @@ export default function VaccineRecord() {
               
               <div className="flex space-x-3 mt-6">
                 <button
-                  onClick={() => setShowModal(false)}
+                  onClick={() => {
+                    setShowModal(false)
+                    setEditingRecord(null)
+                    setNewRecord({
+                      date: '',
+                      vaccine: '',
+                      description: '',
+                      status: 'completed',
+                      nextDue: ''
+                    })
+                  }}
                   className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors duration-200"
                 >
                   取消
                 </button>
                 <button
-                  onClick={handleAddRecord}
+                  onClick={editingRecord ? handleUpdateRecord : handleAddRecord}
                   className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200"
                 >
-                  添加
+                  {editingRecord ? '更新' : '添加'}
                 </button>
               </div>
             </div>
