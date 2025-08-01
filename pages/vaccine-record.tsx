@@ -120,6 +120,14 @@ export default function VaccineRecord() {
     setShowModal(false)
   }
 
+  // 删除疫苗记录
+  const handleDeleteRecord = (id: number) => {
+    if (confirm('确定要删除这条疫苗记录吗？')) {
+      const updatedRecords = vaccineRecords.filter(record => record.id !== id)
+      saveRecords(updatedRecords)
+    }
+  }
+
   const completedCount = vaccineRecords.filter(r => r.status === 'completed').length
   const scheduledCount = vaccineRecords.filter(r => r.status === 'scheduled').length
 
@@ -207,12 +215,19 @@ export default function VaccineRecord() {
                         </div>
                       )}
                     </div>
-                    <div className="ml-4">
+                    <div className="ml-4 flex items-center space-x-2">
                       {record.status === 'completed' ? (
                         <span className="text-green-500 text-2xl">✅</span>
                       ) : (
                         <span className="text-yellow-500 text-2xl">⏳</span>
                       )}
+                      <button
+                        onClick={() => handleDeleteRecord(record.id)}
+                        className="text-red-600 hover:text-red-800 text-sm p-1"
+                        title="删除记录"
+                      >
+                        🗑️
+                      </button>
                     </div>
                   </div>
                 </div>

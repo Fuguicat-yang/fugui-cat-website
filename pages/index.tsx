@@ -46,14 +46,17 @@ export default function Home() {
       <div className="min-h-screen bg-white">
         {/* 顶部导航栏 */}
         <nav className="w-full flex justify-end items-center py-6 px-8 bg-white/80 backdrop-blur sticky top-0 z-20">
-          <div className="flex space-x-4">
-            <Link href="/vaccine-record">
-              <button className="px-5 py-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-semibold shadow transition-colors duration-200">疫苗记录本</button>
-            </Link>
-            <Link href="/photo-album">
-              <button className="px-5 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white font-semibold shadow transition-colors duration-200">爱的相册</button>
-            </Link>
-          </div>
+                      <div className="flex space-x-4">
+              <Link href="/vaccine-record">
+                <button className="px-5 py-2 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-semibold shadow transition-colors duration-200">疫苗记录本</button>
+              </Link>
+              <Link href="/photo-album">
+                <button className="px-5 py-2 rounded-full bg-pink-500 hover:bg-pink-600 text-white font-semibold shadow transition-colors duration-200">爱的相册</button>
+              </Link>
+              <Link href="/food-record">
+                <button className="px-5 py-2 rounded-full bg-green-500 hover:bg-green-600 text-white font-semibold shadow transition-colors duration-200">换粮记录本</button>
+              </Link>
+            </div>
         </nav>
         {/* 主要内容区域 */}
         <div className="relative min-h-screen flex flex-col items-center justify-center p-8">
